@@ -59,23 +59,53 @@ app.post('/transaction/broadcast', function(req, res){
 
 // end-point to mine/create new block
 app.get('/mine', function(req, res) {
+    // come calculations to create a new block
     const lastBlock = bitcoin.getLasBlock()
     const previousBlockHash = lastBlock['hash']
     const currentBlockData = {
         transactions: bitcoin.pendingTransactions,
         index: lastBlock['index'] + 1
     }
+    // do the proof of work to find nonce 
     const nonce = bitcoin.proofOfWork(previousBlockHash, currentBlockData)
+    // hash the block
     const blockHash = bitcoin.hashBlock(previousBlockHash, currentBlockData, nonce)
-
-    // REWARD for mining is optional...
-    bitcoin.createNewTransaction(12.5, "00", nodeAddress)
-
+    // create new block after calculations
     const newBlock = bitcoin.createNewBlock(nonce, previousBlockHash, blockHash)
 
-    res.json({
-        note: "New Block Mined Sucessfully", 
-        block: newBlock
+    // broadcast newBlock tp the network
+    const requestPromises = []
+    bitcoin.networkNodes.forEach(networkNodeUrl => {
+        const requestOptions = {
+            uri: networkNodeUrl + 'receive-new-block',
+            method: 'POST',
+            body: { newBlock: newBlock },
+            json: true
+        }
+        requestPromises.push(rp(requestOptions))
+    })
+    
+    Promise.all(requestPromises)
+    .then(data => {
+        // REWARD for mining is optional...
+        // broadcast the mining REWARD 
+        const requestOptions = {
+            uri: bitcoin.currentNodeUrl + '/transaction/broadcast',
+            method: 'POST',
+            body: { 
+                amount: 12.5,
+                sender: "00",
+                recipient: nodeAddress
+            },
+            json: true
+        }
+        return rp(requestOptions)
+    })
+    .then(data => {
+        res.json({
+            note: "New Block Mined & broadcast sucessfully", 
+            block: newBlock
+        })
     })
 })
 
