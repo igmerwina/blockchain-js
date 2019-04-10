@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const Blockchain = require('./blockchain')  // importing Blockchain constructor function     
 const uuid = require('uuid/v1') //library for create random string
+const port = process.argv[2] // dipakai u/ run server di port berbeda di script> start @ package.json
 
 const app = express()
 const bitcoin = new Blockchain() // bitcoin bisa diganti pake nama lain
@@ -48,6 +49,6 @@ app.get('/mine', function (req, res) {
 
 
 // start the server 
-app.listen(3000, function(){
-    console.log('server jalan di http://localhost:3000')   
+app.listen(port, function(){
+    console.log(`server jalan di http://localhost:${port}`)   
 })
