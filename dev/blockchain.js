@@ -9,6 +9,7 @@ function Blockchain() {
     this.createNewBlock(100, '0', '0') // genesis Block
 }
 
+
 Blockchain.prototype.createNewBlock = function(nonce, previousBlockHash, hash){
     // buat block baru
     const newBlock = {
