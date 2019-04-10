@@ -1,13 +1,17 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const Blockchain = require('./blockchain')  // importing Blockchain constructor function     
+
 const app = express()
+const bitcoin = new Blockchain() // bitcoin bisa diganti pake nama lain
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended:false }))
 
+
 // end-point to show entire blockchain
 app.get('/blockchain', function (req, res) {
-
+    res.send(bitcoin)
 })
 
 
