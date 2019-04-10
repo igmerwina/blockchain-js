@@ -1,11 +1,16 @@
+// Blockchain.js
 // Construction function 
 
 const sha256 = require('sha256')
+const currentNodeUrl = process.argv[3] // buat ngambil url dari  package.json script u/ url node 
 
 
 function Blockchain() {
     this.chain = []
     this.pendingTransactions = []
+
+    this.currentNodeUrl = currentNodeUrl // biar tau node berapa yang lagi jalan
+    this.networkNode = [] // aware of other node inside the network 
 
     this.createNewBlock(100, '0', '0') // genesis Block
 }
