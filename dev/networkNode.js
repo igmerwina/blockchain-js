@@ -95,7 +95,13 @@ app.post('/register-node', function(req, res){
 
 // register multiple nodes at onces for the new node that registered to the network  
 app.post('/register-nodes-bulk', function(req, res){
-
+    const allNetworkNodes = req.body.allNetworkNodes
+    allNetworkNodes.forEach(networkNodeUrl => {
+        const nodeNotAlreadyPresent = bitcoin.networkNodes.indexOf(networkNodeUrl) == -1
+        const notCurrentNode = bitcoin.currentNodeUrl !== networkNodeUrl
+        if (nodeNotAlreadyPresent && notCurrentNode) bitcoin.networkNodes.push(networkNodeUrl)
+    })
+    res.json({ note: 'Bulk registration succesfull' })
 })
 
 // start the server 
