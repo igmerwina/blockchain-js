@@ -77,7 +77,7 @@ app.get('/mine', function(req, res) {
     const requestPromises = []
     bitcoin.networkNodes.forEach(networkNodeUrl => {
         const requestOptions = {
-            uri: networkNodeUrl + 'receive-new-block',
+            uri: networkNodeUrl + '/receive-new-block',
             method: 'POST',
             body: { newBlock: newBlock },
             json: true
@@ -103,11 +103,38 @@ app.get('/mine', function(req, res) {
     })
     .then(data => {
         res.json({
-            note: "New Block Mined & broadcast sucessfully", 
+            note: 'New Block Mined & broadcast sucessfully', 
             block: newBlock
         })
     })
 })
+
+
+// endpoint to receive new lock that being broadcast 
+app.post('/receive-new-block', function(req, res){
+    const newBlock = req.body.newBlock // receiving new block from the broadcast 
+    // afer receive, check the legitimate of the block
+    const lastBlock = bitcoin.getLasBlock()
+    // cek lastBlock hash is equal to newBlok.prevHash
+    const correctHash = lastBlock.hash === newBlock.previousBlockHash // return true or false 
+    // check index of the block. newBlock must be +1 index above lastBlock
+    const correctIndex = lastBlock['index'] + 1 === newBlock['index']
+
+    if (correctHash && correctIndex){
+        bitcoin.chain.push(newBlock) // add new block to the chain
+        bitcoin.pendingTransactions = [] // clear the pending transaction
+        res.json({ 
+            note: 'New block received and accepted',
+            newBlock: newBlock
+        })
+    } else { 
+        res.json({ 
+            note: 'New block rejected',
+            newBlock: newBlock
+        })
+    }
+})
+
 
 // register node and broadcast to the whole network
 // can be run from one certain node
