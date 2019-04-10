@@ -1,9 +1,25 @@
-let express = require('express')
-let app = express()
+const express = require('express')
+const app = express()
  
-app.get('/', function (req, res) {
-  res.send('Hello World')
+
+// end-point to show entire blockchain
+app.get('/blockchain', function (req, res) {
+
 })
- 
-app.listen(3000)
-console.log('go to http://localhost:3000')
+
+
+// end-point to create new transaction
+app.get('/transaction', function (req, res) {
+
+})
+
+
+// end-point to mine/create new block
+app.get('/mine', function (req, res) {
+
+})
+
+
+app.listen(3000, function(){
+    console.log('server jalan di >> http://localhost:3000')   
+})
