@@ -2,6 +2,7 @@
 
 const sha256 = require('sha256')
 
+
 function Blockchain() {
     this.chain = []
     this.pendingTransactions = []
@@ -65,7 +66,6 @@ Blockchain.prototype.proofOfWork = function(previousBlockHash, currentBlockData)
     while (hash.substring(0,4) !== '0000'){ // loop nyari nonce sampai hash star with '0000' ketemu
         nonce++
         hash = this.hashBlock(previousBlockHash, currentBlockData, nonce)
-        console.log(hash)
     }
     return nonce     
 }
