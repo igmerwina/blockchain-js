@@ -47,6 +47,23 @@ app.get('/mine', function (req, res) {
     })
 })
 
+// register node and broadcast to the whole network
+// can be run from one certain node
+app.post('/register-and-broadcast-node', function(req, res){
+    const newNodeUrl = req.body.newNodeUrl 
+})
+
+
+// register new node to other node within the network
+app.post('/register-node', function(req, res){
+
+})
+
+
+// register multiple nodes at onces for the new node that registered to the network  
+app.post('/register-nodes-bulk', function(req, res){
+
+})
 
 // start the server 
 app.listen(port, function(){
