@@ -94,14 +94,7 @@ Blockchain.prototype.chainIsValid = function (blockchain){
         // compare current block to the previous block 
         const currentBlock = blockchain[i]
         const prevBlock = blockchain[i - 1]
-        const blockHash = this.hashBlock(
-            prevBlock['hash'], 
-            { 
-                transactions: currentBlock['transactions'],
-                index: currentBlock['index']
-            },
-            currentBlock['nonce']
-        ) 
+        const blockHash = this.hashBlock(prevBlock['hash'], {transactions: currentBlock['transactions'], index: currentBlock['index']}, currentBlock['nonce']) 
         // validate to start with 0000
         if (blockHash.substring(0, 4) !== '0000') validChain = false
         // comparing every hash on block

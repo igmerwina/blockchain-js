@@ -194,7 +194,8 @@ app.post('/register-nodes-bulk', function(req, res){
 })
 
 
-// consensus endpoint
+// consensus endpoint or consensus algorithm
+// consensus algorithm --> Longest chain rule
 app.get('/consensus', function(req, res){
     const requestPromises = []
     bitcoin.networkNodes.forEach(networkNodeUrl => {
@@ -221,7 +222,7 @@ app.get('/consensus', function(req, res){
             if (blockchain.chain.length > maxChainLength){
                 maxChainLength = blockchain.chain.length
                 newLongestChain = blockchain.chain
-                newPendingTransactions = blockhain.pendingTransactions 
+                newPendingTransactions = blockchain.pendingTransactions 
             }
         })
 

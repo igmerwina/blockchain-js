@@ -1,7 +1,7 @@
 {
   "name": "emoney-blockchainjs",
   "version": "1.0.0",
-  "description": "repo blockchain pakai js untuk my-theses",
+  "description": "repo blockchain-js untuk proyek theses",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
