@@ -106,6 +106,10 @@ Blockchain.prototype.chainIsValid = function (blockchain){
         if (blockHash.substring(0, 4) !== '0000') validChain = false
         // comparing every hash on block
         if (currentBlock['previousBlockHash'] !== prevBlock['hash']) validChain = false // chain is not valid
+        
+        // print the comparison of the hash 
+        console.log('previousBlockHash => ', prevBlock['hash'])
+        console.log('currentBlockHash  => ', currentBlock['hash'])
     }
     // check the genesis block has all of correct data
     // every variable value below should be 'true'
