@@ -22,14 +22,42 @@ app.get('/blockchain', function (req, res) {
 
 
 // end-point to create new transaction
-app.post('/transaction', function (req, res) {
+app.post('/transaction', function(req, res) {
     const blockIndex = bitcoin.createNewTransaction(req.body.amount, req.body.sender, req.body.recipient)
     res.json({ note: `Transaction will be added in block ${blockIndex}.` })
 })
 
 
+
+app.post('/transaction/broadcast', function(req, res){
+    // create new Transaction
+    const newTransaction = bitcoin.createNewTransaction(req.body.amount, req.body.sender, req.body.recipient)
+    // take new Transaction and push to pending transaction array
+    bitcoin.addTransactionToPendingTransactions(newTransaction)
+
+    // broadcast the pending transaction to all network
+    const requestPromises = []
+    // cycle every node  on the network
+    bitcoin.networkNodes.forEach(networkNodeUrl => {
+        const requestOptions = {
+            uri: networkNodeUrl + '/transaction', // send newTransaction to each node with this enpoint
+            method: 'POST',
+            body: newTransaction, 
+            json: true
+        }
+          
+        requestPromises.push(rp(requestOptions))
+    })
+    // run all request 
+    Promise.all(requestPromises)
+    .then(data => { // after all promis done, then response => note
+        res.json({ note: 'Transaction created and broadcast successfully.' })
+    })
+})
+
+
 // end-point to mine/create new block
-app.get('/mine', function (req, res) {
+app.get('/mine', function(req, res) {
     const lastBlock = bitcoin.getLasBlock()
     const previousBlockHash = lastBlock['hash']
     const currentBlockData = {
