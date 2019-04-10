@@ -3,6 +3,7 @@
 
 const sha256 = require('sha256')
 const currentNodeUrl = process.argv[3] // buat ngambil url dari  package.json script u/ url node 
+const uuid = require('uuid/v1')
 
 
 function Blockchain() {
@@ -40,17 +41,24 @@ Blockchain.prototype.getLasBlock = function(){
 }
 
 
+// create new Transaction & return it
 Blockchain.prototype.createNewTransaction = function (amount, sender, recipient) {
     const newTransaction = {
         amount: amount,
         sender: sender,
-        recipient: recipient   
+        recipient: recipient,
+        transactionId: uuid().split('-').join('')
     }
-
-    this.pendingTransactions.push(newTransaction)
-    return this.getLasBlock()['index'] + 1
+    return newTransaction
 }
 
+
+// take transaction object that already created and add it to pending transaction
+// and return index of the block that this transaction been added to
+Blockchain.prototype.addTransactionToPendingTransactions = function(transactionObj) {
+    this.pendingTransactions.push(transactionObj)
+    return this.getLasBlock()['index'] + 1
+}
 
 // create hash for a block
 Blockchain.prototype.hashBlock = function(previousBlockHash, currentBlockData, nonce){
