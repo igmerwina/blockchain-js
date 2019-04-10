@@ -1,4 +1,5 @@
-//file buat ngetest code  
+// test.js
+// file buat ngetest code  
 
 const Blockchain = require('./blockchain')
 const bitcoin = new Blockchain()

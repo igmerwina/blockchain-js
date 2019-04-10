@@ -1,13 +1,15 @@
-const express = require('express')
-const bodyParser = require('body-parser')
+// networkNode.js 
+
+const express = require('express')          // import express
+const bodyParser = require('body-parser')   // import bodyParser  
 const Blockchain = require('./blockchain')  // importing Blockchain constructor function     
-const uuid = require('uuid/v1') //library for create random string
-const rp = require('request-promise') // import request-promise
-const port = process.argv[2] // dipakai u/ run server di port berbeda di script> start @ package.json
+const uuid = require('uuid/v1')             //library for create random string
+const rp = require('request-promise')       // import request-promise
+const port = process.argv[2]                // dipakai u/ run server di port berbeda di script> start @ package.json
 
 const app = express()
-const bitcoin = new Blockchain() // bitcoin bisa diganti pake nama lain
-const nodeAddress = uuid().split('-').join('')
+const bitcoin = new Blockchain()    // bitcoin bisa diganti pake nama lain
+const nodeAddress = uuid().split('-').join('') // diapakai di transaction
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended:false }))
@@ -37,7 +39,7 @@ app.get('/mine', function (req, res) {
     const nonce = bitcoin.proofOfWork(previousBlockHash, currentBlockData)
     const blockHash = bitcoin.hashBlock(previousBlockHash, currentBlockData, nonce)
 
-    // REWARD for mining, is optional...
+    // REWARD for mining is optional...
     bitcoin.createNewTransaction(12.5, "00", nodeAddress)
 
     const newBlock = bitcoin.createNewBlock(nonce, previousBlockHash, blockHash)
@@ -50,27 +52,28 @@ app.get('/mine', function (req, res) {
 
 // register node and broadcast to the whole network
 // can be run from one certain node
+// masih kurang paham sama endpoint ini 
 app.post('/register-and-broadcast-node', function(req, res){
-    const newNodeUrl = req.body.newNodeUrl 
+    const newNodeUrl = req.body.newNodeUrl // I. take single node address
     // cek kalau url emang belum ke register di array: networkNodes
     if (bitcoin.networkNodes.lastIndexOf(newNodeUrl) == -1) bitcoin.networkNodes.push(newNodeUrl)
 
-    const regNodesPromises = []
-    
+    const regNodesPromises = [] // masih kurang paham sama promises
     bitcoin.networkNodes.forEach(networkNodeUrl => {
         const requestOptions = {
-            uri: networkNodeUrl + '/register-node',
-            method: 'post',
+            uri: networkNodeUrl + '/register-node', // II. broadcast new node address to entire network 
+            method: 'POST',
             body: { newNodeUrl: newNodeUrl },
             json: true
         }        
         regNodesPromises.push(rp(requestOptions))
     })
+
     Promise.all(regNodesPromises)
     .then(data => {
         const bulkRegisterOptions = {
-            uri: networkNodeUrl + '/register-nodes-bulk',
-            method: 'post', 
+            uri: newNodeUrl + '/register-nodes-bulk', // III. after broadcast, new node registered by this url
+            method: 'POST', 
             body: { allNetworkNodes: [ ...bitcoin.networkNodes, bitcoin.currentNodeUrl] },
             json: true
         }
@@ -103,6 +106,7 @@ app.post('/register-nodes-bulk', function(req, res){
     })
     res.json({ note: 'Bulk registration succesfull' })
 })
+
 
 // start the server 
 app.listen(port, function(){
