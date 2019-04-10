@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const Blockchain = require('./blockchain')  // importing Blockchain constructor function     
 const uuid = require('uuid/v1') //library for create random string
+const rp = require('request-promise') // import request-promise
 const port = process.argv[2] // dipakai u/ run server di port berbeda di script> start @ package.json
 
 const app = express()
@@ -51,6 +52,24 @@ app.get('/mine', function (req, res) {
 // can be run from one certain node
 app.post('/register-and-broadcast-node', function(req, res){
     const newNodeUrl = req.body.newNodeUrl 
+    // cek kalau url emang belum ke register di array: networkNodes
+    if (bitcoin.networkNodes.lastIndexOf(newNodeUrl) == -1) bitcoin.networkNodes.push(newNodeUrl)
+
+    const regNodesPromises = []
+    
+    bitcoin.networkNodes.forEach(networkNodeUrl => {
+        const requestOptions = {
+            uri: networkNodeUrl + '/register-node',
+            method: 'post',
+            body: { newNodeUrl: newNodeUrl },
+            json: true
+        }        
+        regNodesPromises.push(rp(requestOptions))
+    })
+    Promise.all(regNodesPromises)
+    .then(data => {
+        // use the data 
+    })
 })
 
 

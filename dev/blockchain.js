@@ -10,7 +10,7 @@ function Blockchain() {
     this.pendingTransactions = []
 
     this.currentNodeUrl = currentNodeUrl // biar tau node apa di url berapa
-    this.networkNode = [] // aware of other node inside the network 
+    this.networkNodes = [] // aware of other node inside the network 
 
     this.createNewBlock(100, '0', '0') // genesis Block
 }
