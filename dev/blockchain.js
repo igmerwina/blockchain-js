@@ -6,6 +6,7 @@ const currentNodeUrl = process.argv[3] // buat ngambil url dari  package.json sc
 const uuid = require('uuid/v1')
 
 
+// constructor for Blockchain function
 function Blockchain() {
     this.chain = []
     this.pendingTransactions = []
