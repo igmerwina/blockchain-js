@@ -277,6 +277,11 @@ app.get('/address/:address', function(req, res){
 })
 
 
+// endpoint to get block-expolorer
+app.get('/block-explorer', function(req, res){
+    res.sendFile('./block-explorer/index.html', { root: __dirname })
+})
+
 // start the server 
 app.listen(port, function(){
     console.log(`server jalan di http://localhost:${port}`)   
