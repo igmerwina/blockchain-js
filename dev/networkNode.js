@@ -245,6 +245,25 @@ app.get('/consensus', function(req, res){
 })
 
 
+// endpoint untuk blockchain exploler
+app.get('/block/:blockHash', function(req, res){
+    
+})
+
+
+// endpoint untuk transactionId exploler
+app.get('/transaction/:transactionId', function(req, res){
+
+})
+
+
+// endpoint untuk melihat history transaksi pada alamat tertentu
+// sama current balance nya 
+app.get('/address/:address', function(req, res){
+    
+})
+
+
 // start the server 
 app.listen(port, function(){
     console.log(`server jalan di http://localhost:${port}`)   
