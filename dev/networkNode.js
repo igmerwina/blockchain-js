@@ -269,7 +269,11 @@ app.get('/transaction/:transactionId', function(req, res){
 // endpoint untuk melihat history transaksi pada alamat tertentu
 // sama current balance nya 
 app.get('/address/:address', function(req, res){
-    
+    const address = req.params.address
+    const addressData = bitcoin.getAddressData(address)
+    res.json({
+        addressData: addressData, // adressData isinya addrsTranx & addrsBalance
+    })
 })
 
 

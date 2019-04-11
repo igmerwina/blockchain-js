@@ -154,7 +154,7 @@ Blockchain.prototype.getAddressData = function (address){
     const addressTransactions = []
     // cycling every transactoin inside blockchain
     this.chain.forEach(block => {
-        block.transactions.forEach(transaction{
+        block.transactions.forEach(transaction => {
             if (transaction.sender === address || transaction.recipient === address){
                 // push transaction into the addresTransaction array
                 // add associates transaction with address into the array 
