@@ -257,7 +257,12 @@ app.get('/block/:blockHash', function(req, res){  // localhost:3001/block/00sidj
 
 // endpoint untuk transactionId exploler
 app.get('/transaction/:transactionId', function(req, res){
-
+    const transactionId = req.params.transactionId
+    const transactionData = bitcoin.getTransaction(transactionId)
+    res.json({
+        transaction: transactionData.transaction,
+        block: transactionData.block
+    })
 })
 
 
