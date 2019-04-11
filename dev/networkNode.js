@@ -246,8 +246,12 @@ app.get('/consensus', function(req, res){
 
 
 // endpoint untuk blockchain exploler
-app.get('/block/:blockHash', function(req, res){
-    
+app.get('/block/:blockHash', function(req, res){  // localhost:3001/block/00sidjcisejf81923u89
+    const blockHash = req.params.blockHash // req.params buat mangiil ':' di url
+    const correctBlock = bitcoin.getBlock(blockHash)
+    res.json({ 
+        block: correctBlock
+    })
 })
 
 
