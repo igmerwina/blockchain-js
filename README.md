@@ -6,3 +6,5 @@ Sumber video dari [Udemy: Eric Traub - Learn Blockchain By Building Your Own In 
 
 
 ## Semangat Belajar!!! :fire: :fire: :fire:
+
+status-tutorial: [DONE]
