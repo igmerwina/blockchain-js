@@ -1,4 +1,5 @@
 # Learn blockchain with javascript 
+[![Status:](https://img.shields.io/badge/Status--tutorial-Done-green.svg)](#Done)
 
 Repo ini saya gunakan buat memahami blockchain pake [javascript](https://developer.mozilla.org/en-US/docs/Web/JavaScript) ES6 dan beberapa library terkait
 
